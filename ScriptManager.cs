@@ -32,7 +32,7 @@ namespace MissionPlanner
             a_fiFiles = null;
             try
             {
-                dirScripts = new DirectoryInfo("scripts");
+                dirScripts = new DirectoryInfo("Scripts");
                 a_fiFiles = dirScripts.GetFiles();
                 foreach(FileInfo fi in a_fiFiles)
                 {
