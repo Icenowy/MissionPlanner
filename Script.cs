@@ -12,7 +12,7 @@ namespace MissionPlanner
     {
         DateTime timeout = DateTime.Now;
         //List<string> items = new List<string>();
-        static Microsoft.Scripting.Hosting.ScriptEngine engine;
+        public static Microsoft.Scripting.Hosting.ScriptEngine engine;
         static Microsoft.Scripting.Hosting.ScriptScope scope;
 
         // keeps history

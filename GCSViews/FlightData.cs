@@ -113,6 +113,7 @@ namespace MissionPlanner.GCSViews
         //whether or not the output console has already started
         bool outputwindowstarted = false;
 
+        ScriptManager sm = new ScriptManager();
 
         private void deleteToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
@@ -448,28 +449,28 @@ namespace MissionPlanner.GCSViews
         {
             if (!MainV2.Advanced)
             {
-                if (!tabControlactions.TabPages.Contains(tabActionsSimple))
-                    tabControlactions.TabPages.Add(tabActionsSimple);
+                if (!tabControl1.TabPages.Contains(tabActionsSimple))
+                    tabControl1.TabPages.Add(tabActionsSimple);
                 //tabControlactions.TabPages.Remove(tabGauges);
-                tabControlactions.TabPages.Remove(tabActions);
+                tabControl1.TabPages.Remove(tabActions);
                 tabControlactions.TabPages.Remove(tabStatus);
                 tabControlactions.TabPages.Remove(tabServo);
-                tabControlactions.TabPages.Remove(tabScripts);
+                tabControl1.TabPages.Remove(tabScripts);
 
                 tabControlactions.Invalidate();
             }
             else
             {
                 //tabControlactions.TabPages.Remove(tabGauges);
-                tabControlactions.TabPages.Remove(tabActionsSimple);
-                if (!tabControlactions.TabPages.Contains(tabActions))
-                    tabControlactions.TabPages.Add(tabActions);
+                tabControl1.TabPages.Remove(tabActionsSimple);
+                if (!tabControl1.TabPages.Contains(tabActions))
+                    tabControl1.TabPages.Add(tabActions);
                 if (!tabControlactions.TabPages.Contains(tabStatus))
                     tabControlactions.TabPages.Add(tabStatus);
                 if (!tabControlactions.TabPages.Contains(tabServo))
                     tabControlactions.TabPages.Add(tabServo);
-                if (!tabControlactions.TabPages.Contains(tabScripts))
-                    tabControlactions.TabPages.Add(tabScripts);
+                if (!tabControl1.TabPages.Contains(tabScripts))
+                    tabControl1.TabPages.Add(tabScripts);
             }
         }
 
@@ -3038,9 +3039,11 @@ namespace MissionPlanner.GCSViews
 
         private void BUT_select_script_Click(object sender, EventArgs e)
         {
-            if (openScriptDialog.ShowDialog() == DialogResult.OK)
+            OpenScriptDialog osd = new OpenScriptDialog(sm.Items);
+            osd.ShowDialog();
+            if(osd.selectedItem != "")
             {
-                selectedscript = openScriptDialog.FileName;
+                selectedscript = "Scripts/" + osd.selectedItem;
                 BUT_run_script.Visible = BUT_edit_selected.Visible = true;
                 labelSelectedScript.Text = "Selected Script: " + selectedscript;
             }
@@ -3344,6 +3347,27 @@ namespace MissionPlanner.GCSViews
         {
             txt_messagebox.Select(txt_messagebox.Text.Length, 0);
             txt_messagebox.ScrollToCaret();
+        }
+
+        private void myButton4_Click(object sender, EventArgs e)
+        {
+            if(tabControl1.Visible)
+            {
+                tabControl1.Visible = false;
+                myButton4.Text = "Push-up";
+            }
+            else
+            {
+                tabControl1.Visible = true;
+                myButton4.Text = "Push-down";
+            }
+        }
+
+        private void myButton5_Click(object sender, EventArgs e)
+        {
+            script = null;
+            script = new Script(true);
+            new InteractiveScript(script).Show();
         }
 
     }
