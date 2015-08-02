@@ -1540,9 +1540,16 @@ namespace MissionPlanner.GCSViews
         {
             if (Commands.Rows.Count > 0)
             {
-                if (CustomMessageBox.Show("This will clear your existing planned mission, Continue?", "Confirm", MessageBoxButtons.OKCancel) != DialogResult.OK)
+                if (sender is FlightData)
                 {
-                    return;
+
+                }
+                else
+                {
+                    if (CustomMessageBox.Show("This will clear your existing planned mission, Continue?", "Confirm", MessageBoxButtons.OKCancel) != DialogResult.OK)
+                    {
+                        return;
+                    }
                 }
             }
 
@@ -2065,7 +2072,7 @@ namespace MissionPlanner.GCSViews
             {
                 log.Info("Loading wp params");
 
-                Hashtable param = new Hashtable(MainV2.comPort.MAV.param);
+                Hashtable param = new Hashtable((Hashtable)MainV2.comPort.MAV.param);
 
                 if (param["WP_RADIUS"] != null)
                 {
