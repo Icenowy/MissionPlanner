@@ -263,6 +263,12 @@
     <Compile Include="Arduino\ArduinoSTKv2.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GCSViews\SimpleData.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GCSViews\SimpleData.Designer.cs">
+      <DependentUpon>SimpleData.cs</DependentUpon>
+    </Compile>
     <Compile Include="InteractiveScript.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -891,6 +897,38 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\ConfigurationView\ConfigTradHeli.zh-TW.resx">
       <DependentUpon>ConfigTradHeli.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GCSViews\SimpleData.de-DE.resx">
+      <DependentUpon>SimpleData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GCSViews\SimpleData.es-ES.resx">
+      <DependentUpon>SimpleData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GCSViews\SimpleData.fr.resx">
+      <DependentUpon>SimpleData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GCSViews\SimpleData.it-IT.resx">
+      <DependentUpon>SimpleData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GCSViews\SimpleData.pl.resx">
+      <DependentUpon>SimpleData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GCSViews\SimpleData.resx">
+      <DependentUpon>SimpleData.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GCSViews\SimpleData.ru-RU.resx">
+      <DependentUpon>SimpleData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GCSViews\SimpleData.zh-Hans.resx">
+      <DependentUpon>SimpleData.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GCSViews\SimpleData.zh-Hant.resx">
+      <DependentUpon>SimpleData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GCSViews\SimpleData.zh-TW.resx">
+      <DependentUpon>SimpleData.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\FlightData.zh-Hant.resx">
       <DependentUpon>FlightData.cs</DependentUpon>

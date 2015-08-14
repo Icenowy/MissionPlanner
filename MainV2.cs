@@ -47,6 +47,7 @@ namespace MissionPlanner
 
         public abstract class menuicons
         {
+            public abstract Image sd { get; }
             public abstract Image fd { get; }
             public abstract Image fp { get;  }
             public abstract Image initsetup { get;  }
@@ -62,6 +63,7 @@ namespace MissionPlanner
 
         public class menuicons1 : menuicons
         {
+            public override Image sd { get { return global::MissionPlanner.Properties.Resources.light_flightdata_icon; } }
             public override Image fd { get { return global::MissionPlanner.Properties.Resources.light_flightdata_icon; } }
             public override Image fp { get { return global::MissionPlanner.Properties.Resources.light_flightplan_icon; } }
             public override Image initsetup { get { return global::MissionPlanner.Properties.Resources.light_initialsetup_icon; } }
@@ -77,6 +79,7 @@ namespace MissionPlanner
 
         public class menuicons2 : menuicons
         {
+            public override Image sd { get { return global::MissionPlanner.Properties.Resources.dark_flightdata_icon; } }
             public override Image fd { get { return global::MissionPlanner.Properties.Resources.dark_flightdata_icon; } }
             public override Image fp { get { return global::MissionPlanner.Properties.Resources.dark_flightplan_icon; } }
             public override Image initsetup { get { return global::MissionPlanner.Properties.Resources.dark_initialsetup_icon; } }
@@ -261,6 +264,7 @@ namespace MissionPlanner
         /// ie configuration gets reloaded on every click
         /// </summary>
         public GCSViews.FlightData FlightData;
+        public GCSViews.SimpleData SimpleData;
         public GCSViews.FlightPlanner FlightPlanner;
         GCSViews.Simulation Simulation;
 
@@ -474,6 +478,8 @@ namespace MissionPlanner
             {
                 log.Info("Create FD");
                 FlightData = new GCSViews.FlightData();
+                log.Info("Create SD");
+                SimpleData = new GCSViews.SimpleData();
                 log.Info("Create FP");
                 FlightPlanner = new GCSViews.FlightPlanner();
                 //Configuration = new GCSViews.ConfigurationView.Setup();
@@ -487,6 +493,7 @@ namespace MissionPlanner
                 Python.CreateEngine();
 
                 FlightData.Width = MyView.Width;
+                SimpleData.Width = MyView.Width;
                 FlightPlanner.Width = MyView.Width;
                 Simulation.Width = MyView.Width;
             }
@@ -505,9 +512,14 @@ namespace MissionPlanner
 
             if (MainV2.config["CHK_GDIPlus"] != null)
                 GCSViews.FlightData.myhud.UseOpenGL = !bool.Parse(MainV2.config["CHK_GDIPlus"].ToString());
+            if (MainV2.config["CHK_GDIPlus"] != null)
+                GCSViews.SimpleData.myhud.UseOpenGL = !bool.Parse(MainV2.config["CHK_GDIPlus"].ToString());
+
 
             if (MainV2.config["CHK_hudshow"] != null)
                 GCSViews.FlightData.myhud.hudon = bool.Parse(MainV2.config["CHK_hudshow"].ToString());
+            if (MainV2.config["CHK_hudshow"] != null)
+                GCSViews.SimpleData.myhud.hudon = bool.Parse(MainV2.config["CHK_hudshow"].ToString());
 
             try
             {
@@ -615,6 +627,7 @@ namespace MissionPlanner
                 MenuDonate.Click += MenuCustom_Click;
 
                 MenuFlightData.Visible = false;
+                MenuSimpleData.Visible = false;
                 MenuFlightPlanner.Visible = true;
                 MenuConfigTune.Visible = false;
                 MenuHelp.Visible = false;
@@ -656,6 +669,7 @@ namespace MissionPlanner
             MainMenu.BackgroundImage = displayicons.bg;
 
             MenuFlightData.Image = displayicons.fd;
+            MenuSimpleData.Image = displayicons.sd;
             MenuFlightPlanner.Image = displayicons.fp;
             MenuInitConfig.Image = displayicons.config_tuning;
             MenuSimulation.Image = displayicons.sim;
@@ -667,6 +681,7 @@ namespace MissionPlanner
 
 
             MenuFlightData.ForeColor = ThemeManager.TextColor;
+            MenuSimpleData.ForeColor = ThemeManager.TextColor;
             MenuFlightPlanner.ForeColor = ThemeManager.TextColor;
             MenuInitConfig.ForeColor = ThemeManager.TextColor;
             MenuSimulation.ForeColor = ThemeManager.TextColor;
@@ -682,6 +697,7 @@ namespace MissionPlanner
             if (getConfig("password_protect") == "" || bool.Parse(getConfig("password_protect")) == false)
             {
                 MenuFlightData.Visible = true;
+                MenuSimpleData.Visible = true;
                 MenuFlightPlanner.Visible = true;
                 MenuConfigTune.Visible = true;
                 MenuHelp.Visible = true;
@@ -694,6 +710,7 @@ namespace MissionPlanner
                 if (Password.VerifyPassword())
                 {
                     MenuFlightData.Visible = true;
+                    MenuSimpleData.Visible = true;
                     MenuFlightPlanner.Visible = true;
                     MenuConfigTune.Visible = true;
                     MenuHelp.Visible = true;
@@ -1071,6 +1088,7 @@ namespace MissionPlanner
                 }
 
                 FlightData.CheckBatteryShow();
+                SimpleData.CheckBatteryShow();
 
                 MissionPlanner.Utilities.Tracking.AddEvent("Connect", "Connect", comPort.MAV.cs.firmware.ToString(), comPort.MAV.param.Count.ToString());
                 MissionPlanner.Utilities.Tracking.AddTiming("Connect", "Connect Time", (DateTime.Now - connecttime).TotalMilliseconds, "");
@@ -1323,6 +1341,12 @@ namespace MissionPlanner
             // close all tabs
             MyView.Dispose();
 
+            log.Info("closing sd");
+            try
+            {
+                SimpleData.Dispose();
+            }
+            catch { }
             log.Info("closing fd");
             try
             {
@@ -1886,6 +1910,7 @@ namespace MissionPlanner
 
                             // force redraw is no other packets are being read
                             GCSViews.FlightData.myhud.Invalidate();
+                            GCSViews.SimpleData.myhud.Invalidate();
                         }
                     }
 
@@ -2063,6 +2088,7 @@ namespace MissionPlanner
             catch { }
 
             MyView.AddScreen(new MainSwitcher.Screen("FlightData", FlightData, true));
+            MyView.AddScreen(new MainSwitcher.Screen("SimpleData", SimpleData, true));
             MyView.AddScreen(new MainSwitcher.Screen("FlightPlanner", FlightPlanner, true));
             MyView.AddScreen(new MainSwitcher.Screen("HWConfig", new GCSViews.InitialSetup(), false));
             MyView.AddScreen(new MainSwitcher.Screen("SWConfig", new GCSViews.SoftwareConfig(), false));
@@ -2357,7 +2383,11 @@ namespace MissionPlanner
                 MenuConnect_Click(null, null);
                 return true;
             }
-
+            if (keyData == Keys.F1)
+            {
+                MenuSimpleData_Click(null, null);
+                return true;
+            }
             if (keyData == Keys.F2)
             {
                 MenuFlightData_Click(null, null);
@@ -2482,7 +2512,7 @@ namespace MissionPlanner
                 config["language"] = ci.Name;
                 //System.Threading.Thread.CurrentThread.CurrentCulture = ci;
 
-                HashSet<Control> views = new HashSet<Control> { this, FlightData, FlightPlanner, Simulation };
+                HashSet<Control> views = new HashSet<Control> { this, FlightData, SimpleData, FlightPlanner, Simulation };
 
                 foreach (Control view in MyView.Controls)
                     views.Add(view);
@@ -2876,6 +2906,9 @@ namespace MissionPlanner
             new ConnectionOptions().Show(this);
         }
 
-
+        private void MenuSimpleData_Click(object sender, EventArgs e)
+        {
+            MyView.ShowScreen("SimpleData");
+        }
     }
 }
